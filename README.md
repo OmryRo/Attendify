@@ -1,1 +1,1 @@
-# Attendity
+# Attendify
