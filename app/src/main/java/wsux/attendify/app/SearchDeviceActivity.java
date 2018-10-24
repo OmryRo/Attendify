@@ -13,7 +13,7 @@ public class SearchDeviceActivity extends Activity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_search_device);
 
-        BeaconHandler beaconHandler = new BeaconHandler(this, new BeaconHandler.OnBeaconSearchResult() {
+        beaconHandler = new BeaconHandler(this, new BeaconHandler.OnBeaconSearchResult() {
             @Override
             public void found() {
 
