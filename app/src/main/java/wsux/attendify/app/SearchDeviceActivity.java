@@ -12,7 +12,10 @@ import android.support.design.widget.Snackbar;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
+ import android.support.v4.app.FragmentActivity;
 import android.support.v7.widget.Toolbar;
+import android.support.v7.app.ActionBar;
+//import android.widget.Toolbar ;
 import android.util.Log;
 import android.view.View;
 import android.widget.RelativeLayout;
@@ -26,7 +29,7 @@ import com.google.android.gms.nearby.messages.NearbyPermissions;
 import android.support.design.widget.Snackbar;
 
 
-public class SearchDeviceActivity extends Activity
+public class SearchDeviceActivity extends FragmentActivity
     implements GoogleApiClient.ConnectionCallbacks,
         GoogleApiClient.OnConnectionFailedListener
 {
@@ -44,6 +47,10 @@ public class SearchDeviceActivity extends Activity
     protected void onCreate(Bundle savedInstanceState)
     {
         super.onCreate(savedInstanceState);
+        setContentView(R.layout.activity_search_device);
+
+//        Toolbar myToolbar = (Toolbar) findViewById(R.id.toolbar);
+//        setSupportActionBar(myToolbar);
 
         if(savedInstanceState != null)
         {
@@ -55,6 +62,7 @@ public class SearchDeviceActivity extends Activity
             Log.i(TAG,"Requesting permissions needed for this app.");
             requestPermissions();
         }
+        setBeaconHandler();
 
 
     }
@@ -66,6 +74,8 @@ public class SearchDeviceActivity extends Activity
         if(havePermissions())
         {
             beaconHandler.start();
+            buildGoogleApiClient();
+
         }
     }
 
@@ -86,13 +96,14 @@ public class SearchDeviceActivity extends Activity
 
     private boolean havePermissions()
     {
-        return ContextCompat.checkSelfPermission(this, Manifest.permission.ACCESS_COARSE_LOCATION)
+        return ContextCompat.checkSelfPermission(this,
+                Manifest.permission.ACCESS_FINE_LOCATION)
                 == PackageManager.PERMISSION_GRANTED;
     }
     private void requestPermissions()
     {
         ActivityCompat.requestPermissions(this,
-                new String[]{Manifest.permission.ACCESS_COARSE_LOCATION},PERMISSIONS_REQUEST_CODE);
+                new String[]{Manifest.permission.ACCESS_FINE_LOCATION},PERMISSIONS_REQUEST_CODE);
     }
 
 
@@ -113,5 +124,41 @@ public class SearchDeviceActivity extends Activity
     public void onConnectionFailed(@NonNull ConnectionResult connectionResult)
     {
 
+    }
+    private synchronized void buildGoogleApiClient() {
+        if (mGoogleApiClient == null) {
+            mGoogleApiClient = new GoogleApiClient.Builder(this)
+                    .addApi(Nearby.MESSAGES_API, new MessagesOptions.Builder()
+                            .setPermissions(NearbyPermissions.BLE).build())
+                    .addConnectionCallbacks(this)
+                    .enableAutoManage(this, this)
+                    .build();
+        }
+    }
+
+    private void setBeaconHandler()
+    {
+        beaconHandler = new BeaconHandler(this, new BeaconHandler.OnBeaconSearchResult() {
+            @Override
+            public void found() {
+
+                Intent changeToConfirmIdentity = new Intent(
+                        SearchDeviceActivity.this,
+                        ConfirmIdentityActivity.class
+                );
+                startActivity(changeToConfirmIdentity);
+
+            }
+
+            @Override
+            public void foundButNotInTime(String deviceName, String hourStart, String hourEnd) {
+
+            }
+
+            @Override
+            public void notFound(int numberOfOtherDevicesInScan) {
+
+            }
+        });
     }
 }
