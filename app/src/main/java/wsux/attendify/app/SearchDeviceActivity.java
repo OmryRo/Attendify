@@ -1,52 +1,26 @@
 package wsux.attendify.app;
 
 import android.Manifest;
-import android.app.Activity;
-import android.content.Context;
-import android.content.Intent;
-import android.content.pm.PackageManager;
-import android.net.Uri;
-import android.os.Bundle;
-import android.provider.Settings;
-import android.support.annotation.NonNull;
-import android.support.annotation.Nullable;
-import android.support.design.widget.Snackbar;
-import android.support.v4.app.ActivityCompat;
-import android.support.v4.content.ContextCompat;
-import android.support.v7.app.AppCompatActivity;
- import android.support.v4.app.FragmentActivity;
-import android.support.v7.widget.Toolbar;
-import android.support.v7.app.ActionBar;
-//import android.widget.Toolbar ;
-import android.util.Log;
-import android.view.View;
-import android.widget.RelativeLayout;
-
-import com.google.android.gms.common.ConnectionResult;
-import com.google.android.gms.common.api.GoogleApiClient;
-import com.google.android.gms.nearby.Nearby;
-import com.google.android.gms.nearby.messages.MessagesOptions;
-import com.google.android.gms.nearby.messages.NearbyPermissions;
-
-import android.support.design.widget.Snackbar;
-import android.Manifest;
+import android.annotation.TargetApi;
 import android.app.PendingIntent;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.net.Uri;
+import android.os.Build;
 import android.os.Bundle;
+import android.os.Parcelable;
 import android.provider.Settings;
-import android.service.carrier.CarrierMessagingService;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.design.widget.Snackbar;
 import android.support.v4.app.ActivityCompat;
+import android.support.v4.app.FragmentActivity;
 import android.support.v4.content.ContextCompat;
-import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.View;
 import android.widget.RelativeLayout;
+
 
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.api.GoogleApiClient;
@@ -68,10 +42,9 @@ public class SearchDeviceActivity extends FragmentActivity
     private static final int PERMISSIONS_REQUEST_CODE = 1111;
     private static final String KEY_SUBSCRIBED = "subscribed";
     private RelativeLayout mContainer;
-
     private BeaconHandler beaconHandler;
     private GoogleApiClient mGoogleApiClient;
-    private boolean mSubscribe = false;
+    private boolean mSubscribed = false;
 
     @Override
     protected void onCreate(Bundle savedInstanceState)
@@ -84,7 +57,7 @@ public class SearchDeviceActivity extends FragmentActivity
         mContainer = (RelativeLayout) findViewById(R.id.main_activity_container);
         if(savedInstanceState != null)
         {
-            mSubscribe = savedInstanceState.getBoolean(KEY_SUBSCRIBED,false);
+            mSubscribed = savedInstanceState.getBoolean(KEY_SUBSCRIBED,false);
         }
 
         if (! havePermissions())
@@ -121,7 +94,7 @@ public class SearchDeviceActivity extends FragmentActivity
     public void onSaveInstanceState(Bundle outState)
     {
         super.onSaveInstanceState(outState);
-        outState.putBoolean(KEY_SUBSCRIBED,mSubscribe);
+        outState.putBoolean(KEY_SUBSCRIBED,mSubscribed);
     }
 
     private boolean havePermissions()
@@ -141,6 +114,7 @@ public class SearchDeviceActivity extends FragmentActivity
     public void onConnected(@Nullable Bundle bundle)
     {
         Log.i(TAG,"Attendify connected.");
+//        subscribe();
 
     }
 
@@ -235,5 +209,31 @@ public class SearchDeviceActivity extends FragmentActivity
                                 PERMISSIONS_REQUEST_CODE);
                     }
                 }).show();
+    }
+
+    @Override
+    public void onRequestPermissionsResult(int requestCode,
+                                           @NonNull String[]permissions, @NonNull int[] grantResults) {
+        if (requestCode != PERMISSIONS_REQUEST_CODE) {
+            return;
+        }
+
+        for (int i = 0; i < permissions.length; i++) {
+            String permission = permissions[i];
+            if (grantResults[i] == PackageManager.PERMISSION_DENIED) {
+                if (shouldShowRequestPermissionRationale(permission)) {
+                    Log.i(TAG, "Permission denied without 'NEVER ASK AGAIN': "
+                            + permission);
+                    showRequestPermissionsSnackbar();
+                } else {
+                    Log.i(TAG, "Permission denied with 'NEVER ASK AGAIN': "
+                            + permission);
+                    showLinkToSettingsSnackbar();
+                }
+            } else {
+                Log.i(TAG, "Permission granted, building GoogleApiClient");
+                buildGoogleApiClient();
+            }
+        }
     }
 }
