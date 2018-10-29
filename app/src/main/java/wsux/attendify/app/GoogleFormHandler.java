@@ -39,6 +39,7 @@ public class GoogleFormHandler {
     private static final String FORM_REAL_NAME_INPUT_ID = "entry.90001332";
     private static final String FORM_EMAIL_INPUT_ID = "entry.84085877";
     private static final String FORM_DEVICE_ID_INPUT_ID = "entry.2012310578";
+    private static final String GOOGLE_FORM_CONFIRM_MESSAGE_CLASS = "freebirdFormviewerViewResponseConfirmContentContainer"; // blame google.
     private static final int HTTP_TIMEOUT = 10000;
     private static final String USER_AGENT = "Mozilla/5.0 (Windows NT 10.0; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/54.0.2840.99 Safari/537.36";
 
@@ -108,7 +109,7 @@ public class GoogleFormHandler {
         }
 
         Document response = Jsoup.parse(output);
-        Elements confirmationElements = response.getElementsByClass("freebirdFormviewerViewResponseConfirmContentContainer");
+        Elements confirmationElements = response.getElementsByClass(GOOGLE_FORM_CONFIRM_MESSAGE_CLASS);
         if (confirmationElements.size() == 0) {
             Log.d(TAG, "validateResponse: failed, no confirmation message: " + output);
             return false;
