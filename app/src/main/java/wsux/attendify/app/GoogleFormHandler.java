@@ -43,8 +43,8 @@ public class GoogleFormHandler {
     private static final int HTTP_TIMEOUT = 10000;
     private static final String USER_AGENT = "Mozilla/5.0 (Windows NT 10.0; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/54.0.2840.99 Safari/537.36";
 
-    public static void sendGoogleForm(String name, String email, long deviceId, OnGoogleFormResponse onGoogleFormResponse) {
-        new SendGoogleForm().execute(name, email, String.valueOf(deviceId), onGoogleFormResponse);
+    public static void sendGoogleForm(String name, String email, String deviceId, OnGoogleFormResponse onGoogleFormResponse) {
+        new SendGoogleForm().execute(name, email, deviceId, onGoogleFormResponse);
     }
 
     private static Pair<Integer, String> requestGoogleForm(String formURL, Map<String, String> postParams) {

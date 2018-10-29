@@ -16,4 +16,9 @@
 
     <string name="settings">Settings</string>
     <string name="ok">OK</string>
+
+    <string name="invalid_email">אימייל לא תקין</string>
+    <string name="invalid_name">שם לא תקין</string>
+    <string name="attendence_confirmed">המערכת אישרה הגעתך.</string>
+    <string name="attendence_error">התרחשה שגיאה, פנה למרצה.</string>
 </resources>
