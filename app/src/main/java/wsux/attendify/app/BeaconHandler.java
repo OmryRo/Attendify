@@ -10,6 +10,9 @@ import android.content.Context;
 import android.content.Intent;
 import android.util.Log;
 
+import java.util.HashMap;
+import java.util.Map;
+
 public class BeaconHandler {
 
     private final static String TAG = "BEACON_HANDLER";
@@ -34,14 +37,26 @@ public class BeaconHandler {
 
         scanner = adapter.getBluetoothLeScanner();
         callback = new ScanCallback() {
-            @Override
-            public void onScanResult(int callbackType, ScanResult result)
-            {
-                super.onScanResult(callbackType, result);
-                Log.d(TAG, "onScanResult: " + result.getDevice().getName() + " " +result.getDevice().getAddress());
+            Map<String, Long> devicesFound = new HashMap<>();
 
-                if (OUR_BEACON.equals(result.getDevice().getAddress())) {
+            @Override
+            public synchronized void onScanResult(int callbackType, ScanResult result) {
+                super.onScanResult(callbackType, result);
+                Log.d(TAG, "onScanResult: " + result.getDevice().getName() + " " + result.getDevice().getAddress());
+
+                String address = result.getDevice().getAddress();
+
+                if (OUR_BEACON.equals(address)) {
                     deviceFound();
+                } else {
+                    devicesFound.put(address, System.currentTimeMillis());
+                    notFound(devicesFound.size());
+
+                    for (Map.Entry<String, Long> entry : devicesFound.entrySet()) {
+                        if ((System.currentTimeMillis() - entry.getValue()) > 2)
+                            devicesFound.remove(entry.getKey());
+                    }
+
                 }
             }
         };
@@ -50,6 +65,10 @@ public class BeaconHandler {
     private void deviceFound() {
         this.stop();
         onBeaconSearchResult.found();
+    }
+
+    private void notFound(int numberOfOtherDevicesInScan) {
+        onBeaconSearchResult.notFound(numberOfOtherDevicesInScan);
     }
 
     public void start() {
@@ -64,7 +83,9 @@ public class BeaconHandler {
 
     public interface OnBeaconSearchResult {
         void found();
+
         void foundButNotInTime(String deviceName, String hourStart, String hourEnd);
+
         void notFound(int numberOfOtherDevicesInScan);
     }
 
