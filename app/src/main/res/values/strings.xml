@@ -1,3 +1,4 @@
 <resources>
     <string name="app_name">Attendify</string>
+    <string name="devices_found">מחפש.. בסריקה האחרונה נמצאו %d מכשירים.</string>
 </resources>
