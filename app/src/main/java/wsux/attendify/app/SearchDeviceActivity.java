@@ -78,8 +78,7 @@ public class SearchDeviceActivity extends Activity {
     }
 
     @Override
-    protected void onActivityResult(int requestCode, int resultCode, Intent data)
-    {
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
         if (requestCode == BeaconHandler.REQUEST_ENABLE_BT && resultCode == RESULT_CANCELED) {
             finish();
