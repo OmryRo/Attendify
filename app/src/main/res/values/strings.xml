@@ -1,5 +1,8 @@
 <resources>
     <string name="app_name">Attendify</string>
+
+    <string name="devices_found">מחפש.. בסריקה האחרונה נמצאו %d מכשירים.</string>
+
     <string name="action_settings">Settings</string>
 
     <string name="permission_rationale">
@@ -21,4 +24,5 @@
     <string name="invalid_name">שם לא תקין</string>
     <string name="attendence_confirmed">המערכת אישרה הגעתך.</string>
     <string name="attendence_error">התרחשה שגיאה, פנה למרצה.</string>
+
 </resources>
