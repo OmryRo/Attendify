@@ -48,11 +48,7 @@ public class SearchDeviceActivity extends Activity {
 
             @Override
             public void notFound(int numberOfOtherDevicesInScan) {
-                loadingIV.clearAnimation();
-
                 loadingTV.setText(getString(R.string.devices_found, numberOfOtherDevicesInScan));
-
-
             }
         });
     }
