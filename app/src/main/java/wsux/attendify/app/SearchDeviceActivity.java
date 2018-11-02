@@ -1,8 +1,11 @@
 package wsux.attendify.app;
 
+import android.Manifest;
 import android.app.Activity;
 import android.content.Intent;
 import android.media.Image;
+import android.content.pm.PackageManager;
+import android.os.Build;
 import android.os.Bundle;
 import android.view.animation.Animation;
 import android.view.animation.RotateAnimation;
@@ -12,8 +15,9 @@ import android.widget.TextView;
 public class SearchDeviceActivity extends Activity {
 
     private BeaconHandler beaconHandler;
-    ImageView loadingIV;
-    TextView loadingTV;
+    private ImageView loadingIV;
+    private TextView loadingTV;
+    private static final int FINE_LOCATION_REQUEST_CODE = 1111;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -28,6 +32,12 @@ public class SearchDeviceActivity extends Activity {
         animation.setRepeatCount(-1);
         animation.setDuration(2000);
         loadingIV.setAnimation(animation);
+
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+            if (checkSelfPermission(Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
+                requestPermissions(new String[]{Manifest.permission.ACCESS_FINE_LOCATION}, FINE_LOCATION_REQUEST_CODE);
+            }
+        }
 
         beaconHandler = new BeaconHandler(this, new BeaconHandler.OnBeaconSearchResult() {
             @Override
@@ -64,5 +74,30 @@ public class SearchDeviceActivity extends Activity {
         super.onPause();
         beaconHandler.stop();
 
+    }
+
+    @Override
+    public void onRequestPermissionsResult(int requestCode,
+                                           String permissions[], int[] grantResults) {
+        switch (requestCode) {
+            case FINE_LOCATION_REQUEST_CODE: {
+
+                if (grantResults.length > 0
+                        && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+
+                } else {
+                    finish();
+                }
+                return;
+            }
+        }
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        if (requestCode == BeaconHandler.REQUEST_ENABLE_BT && resultCode == RESULT_CANCELED) {
+            finish();
+        }
     }
 }
