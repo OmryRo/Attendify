@@ -13,8 +13,7 @@ import android.util.Log;
 import java.util.HashMap;
 import java.util.Map;
 
-public class BeaconHandler
-{
+public class BeaconHandler {
 
     private final static String TAG = "BEACON_HANDLER";
     public final static int REQUEST_ENABLE_BT = 9999;
@@ -37,9 +36,7 @@ public class BeaconHandler
         }
 
         scanner = adapter.getBluetoothLeScanner();
-        callback = new ScanCallback()
-        {
-
+        callback = new ScanCallback() {
             Map<String, Long> devicesFound = new HashMap<>();
 
             @Override
@@ -84,8 +81,7 @@ public class BeaconHandler
         scanner.stopScan(callback);
     }
 
-    public interface OnBeaconSearchResult
-    {
+    public interface OnBeaconSearchResult {
         void found();
 
         void foundButNotInTime(String deviceName, String hourStart, String hourEnd);
