@@ -25,23 +25,25 @@ public class BeaconHandler {
     private ScanCallback callback;
     private OnBeaconSearchResult onBeaconSearchResult;
     private Map<String, Long> devicesFound = new HashMap<>();
+    private Activity activity;
 
 
     public BeaconHandler(Context context, OnBeaconSearchResult onBeaconSearchResult) {
+        this.activity = (Activity) context;
         this.bluetoothManager = (BluetoothManager) context.getSystemService(Context.BLUETOOTH_SERVICE);
         this.bluetoothAdapter = bluetoothManager.getAdapter();
         this.onBeaconSearchResult = onBeaconSearchResult;
 
-        ensureTheBluetoothIsEnable((Activity) context);
+        ensureTheBluetoothIsEnable();
 
         this.scanner = bluetoothAdapter.getBluetoothLeScanner();
         setCallBack();
     }
 
-    private void ensureTheBluetoothIsEnable(Activity context) {
+    private void ensureTheBluetoothIsEnable() {
         if (isBluetootOff()) {
             Intent enableBtIntent = new Intent(BluetoothAdapter.ACTION_REQUEST_ENABLE);
-            context.startActivityForResult(enableBtIntent, REQUEST_ENABLE_BT);
+            activity.startActivityForResult(enableBtIntent, REQUEST_ENABLE_BT);
         }
     }
 
