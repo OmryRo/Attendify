@@ -74,10 +74,17 @@ public class BeaconHandler {
     private void deviceNotFound(String address) {
         devicesFound.put(address, System.currentTimeMillis());
         notFound(devicesFound.size());
-        devicesFound.entrySet().removeIf(deviceFound -> (System.currentTimeMillis() - deviceFound.getValue()) > 2);
+        removeDeviceFoundOld();
     }
 
-
+    private void removeDeviceFoundOld()
+    {
+        Map<String, Long> devicesFoundTemp = devicesFound;
+        for (Map.Entry<String, Long> deviceFound: devicesFoundTemp.entrySet()){
+         if((System.currentTimeMillis() - deviceFound.getValue()) > 2)
+             this.devicesFound.remove(deviceFound.getKey());
+        }
+    }
     private void deviceFound() {
         this.stop();
         onBeaconSearchResult.found();
