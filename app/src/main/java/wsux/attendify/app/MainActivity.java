@@ -12,6 +12,7 @@ import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ProgressBar;
 import android.widget.TextView;
 
 public class MainActivity extends Activity {
@@ -25,6 +26,7 @@ public class MainActivity extends Activity {
     private View loadingScreenBackground;
     private View loadingScreenPopup;
     private TextView loadingScreenText;
+    private ProgressBar loadingIV;
     private Button sendButton;
     private BeaconHandler beaconHandler;
     private boolean isFound = false;
