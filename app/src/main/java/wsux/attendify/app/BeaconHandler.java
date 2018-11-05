@@ -21,8 +21,8 @@ public class BeaconHandler {
     public final static int REQUEST_ENABLE_BT = 9999;
     private final static String OUR_BEACON_MAC = "CB:B9:C1:9E:E8:10";
 
-    private BluetoothManager bluetoothManager;
-    private BluetoothAdapter bluetoothAdapter;
+    private BluetoothManager manager;
+    private BluetoothAdapter adapter;
     private BluetoothLeScanner scanner;
     private ScanCallback callback;
     private OnBeaconSearchResult onBeaconSearchResult;
@@ -32,13 +32,13 @@ public class BeaconHandler {
 
     public BeaconHandler(Context context, OnBeaconSearchResult onBeaconSearchResult) {
         this.activity = (Activity) context;
-        this.bluetoothManager = (BluetoothManager) context.getSystemService(Context.BLUETOOTH_SERVICE);
-        this.bluetoothAdapter = bluetoothManager.getAdapter();
+        this.manager = (BluetoothManager) context.getSystemService(Context.BLUETOOTH_SERVICE);
+        this.adapter = manager.getAdapter();
         this.onBeaconSearchResult = onBeaconSearchResult;
 
         ensureTheBluetoothIsEnable();
 
-        this.scanner = bluetoothAdapter.getBluetoothLeScanner();
+        this.scanner = adapter.getBluetoothLeScanner();
         setCallBack();
     }
 
@@ -50,7 +50,7 @@ public class BeaconHandler {
     }
 
     private boolean isBluetootOff() {
-        return bluetoothAdapter == null || !bluetoothAdapter.isEnabled();
+        return adapter == null || !adapter.isEnabled();
     }
 
     private void setCallBack() {
