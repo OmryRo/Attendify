@@ -24,5 +24,6 @@
     <string name="invalid_name">שם לא תקין</string>
     <string name="attendence_confirmed">המערכת אישרה הגעתך.</string>
     <string name="attendence_error">התרחשה שגיאה, פנה למרצה.</string>
+    <string name="attendify">Attendify</string>
 
 </resources>
