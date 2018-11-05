@@ -11,6 +11,8 @@ import android.content.Intent;
 import android.util.Log;
 
 import java.util.HashMap;
+import java.util.LinkedList;
+import java.util.List;
 import java.util.Map;
 
 public class BeaconHandler {
@@ -77,12 +79,17 @@ public class BeaconHandler {
         removeDeviceFoundOld();
     }
 
-    private void removeDeviceFoundOld()
-    {
-        Map<String, Long> devicesFoundTemp = devicesFound;
-        for (Map.Entry<String, Long> deviceFound: devicesFoundTemp.entrySet()){
-         if((System.currentTimeMillis() - deviceFound.getValue()) > 2)
-             this.devicesFound.remove(deviceFound.getKey());
+    private void removeDeviceFoundOld() {
+        List<String> keysToRemove = new LinkedList<>();
+
+        for (Map.Entry<String, Long> deviceFound: devicesFound.entrySet()){
+            if((System.currentTimeMillis() - deviceFound.getValue()) > 2) {
+                keysToRemove.add(deviceFound.getKey());
+            }
+        }
+
+        for (String key : keysToRemove) {
+            devicesFound.remove(key);
         }
     }
     private void deviceFound() {
