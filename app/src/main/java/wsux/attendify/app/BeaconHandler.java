@@ -17,51 +17,74 @@ public class BeaconHandler {
 
     private final static String TAG = "BEACON_HANDLER";
     public final static int REQUEST_ENABLE_BT = 9999;
-    private final static String OUR_BEACON = "CB:B9:C1:9E:E8:10";
+    private final static String OUR_BEACON_MAC = "CB:B9:C1:9E:E8:10";
 
-    private BluetoothManager manager;
-    private BluetoothAdapter adapter;
+    private BluetoothManager bluetoothManager;
+    private BluetoothAdapter bluetoothAdapter;
     private BluetoothLeScanner scanner;
     private ScanCallback callback;
     private OnBeaconSearchResult onBeaconSearchResult;
+    private Map<String, Long> devicesFound = new HashMap<>();
+    private Activity activity;
+
 
     public BeaconHandler(Context context, OnBeaconSearchResult onBeaconSearchResult) {
-        manager = (BluetoothManager) context.getSystemService(Context.BLUETOOTH_SERVICE);
-        adapter = manager.getAdapter();
+        this.activity = (Activity) context;
+        this.bluetoothManager = (BluetoothManager) context.getSystemService(Context.BLUETOOTH_SERVICE);
+        this.bluetoothAdapter = bluetoothManager.getAdapter();
         this.onBeaconSearchResult = onBeaconSearchResult;
 
-        if (adapter == null || !adapter.isEnabled()) {
-            Intent enableBtIntent = new Intent(BluetoothAdapter.ACTION_REQUEST_ENABLE);
-            ((Activity) context).startActivityForResult(enableBtIntent, REQUEST_ENABLE_BT);
-        }
+        ensureTheBluetoothIsEnable();
 
-        scanner = adapter.getBluetoothLeScanner();
+        this.scanner = bluetoothAdapter.getBluetoothLeScanner();
+        setCallBack();
+    }
+
+    private void ensureTheBluetoothIsEnable() {
+        if (isBluetootOff()) {
+            Intent enableBtIntent = new Intent(BluetoothAdapter.ACTION_REQUEST_ENABLE);
+            activity.startActivityForResult(enableBtIntent, REQUEST_ENABLE_BT);
+        }
+    }
+
+    private boolean isBluetootOff() {
+        return bluetoothAdapter == null || !bluetoothAdapter.isEnabled();
+    }
+
+    private void setCallBack() {
         callback = new ScanCallback() {
-            Map<String, Long> devicesFound = new HashMap<>();
 
             @Override
             public synchronized void onScanResult(int callbackType, ScanResult result) {
                 super.onScanResult(callbackType, result);
                 Log.d(TAG, "onScanResult: " + result.getDevice().getName() + " " + result.getDevice().getAddress());
 
-                String address = result.getDevice().getAddress();
+                String deviceFoundMAC = result.getDevice().getAddress();
 
-                if (OUR_BEACON.equals(address)) {
+                if (OUR_BEACON_MAC.equals(deviceFoundMAC)) {
                     deviceFound();
                 } else {
-                    devicesFound.put(address, System.currentTimeMillis());
-                    notFound(devicesFound.size());
-
-                    for (Map.Entry<String, Long> entry : devicesFound.entrySet()) {
-                        if ((System.currentTimeMillis() - entry.getValue()) > 2)
-                            devicesFound.remove(entry.getKey());
-                    }
+                    deviceNotFound(deviceFoundMAC);
 
                 }
             }
         };
     }
 
+    private void deviceNotFound(String address) {
+        devicesFound.put(address, System.currentTimeMillis());
+        notFound(devicesFound.size());
+        removeDeviceFoundOld();
+    }
+
+    private void removeDeviceFoundOld()
+    {
+        Map<String, Long> devicesFoundTemp = devicesFound;
+        for (Map.Entry<String, Long> deviceFound: devicesFoundTemp.entrySet()){
+         if((System.currentTimeMillis() - deviceFound.getValue()) > 2)
+             this.devicesFound.remove(deviceFound.getKey());
+        }
+    }
     private void deviceFound() {
         this.stop();
         onBeaconSearchResult.found();
