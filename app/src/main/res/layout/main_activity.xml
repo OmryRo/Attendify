@@ -83,8 +83,8 @@
         android:layout_height="match_parent"
         android:background="#aa000000"
         android:elevation="2dp"
-        android:visibility="gone"
-        android:orientation="horizontal"></LinearLayout>
+        android:orientation="horizontal"
+        android:visibility="gone"></LinearLayout>
 
     <LinearLayout
         android:id="@+id/loadingPopup"
@@ -97,24 +97,11 @@
         android:background="#fff"
         android:elevation="3dp"
         android:orientation="vertical"
-        android:visibility="visible"
+        android:visibility="gone"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent">
-
-        <ProgressBar
-            android:id="@+id/loadingIV"
-            style="?android:attr/progressBarStyle"
-            android:layout_width="match_parent"
-            android:layout_height="126dp"
-            android:layout_centerInParent="true"
-            android:visibility="gone"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintLeft_toLeftOf="parent"
-            app:layout_constraintRight_toRightOf="parent"
-            app:layout_constraintTop_toTopOf="parent"
-            tools:paddingTop="10dp" />
 
         <TextView
             android:id="@+id/loadingText"
@@ -122,8 +109,30 @@
             android:layout_height="wrap_content"
             android:text="Searching devices..."
             android:textAlignment="center"
-            android:textAppearance="@android:style/TextAppearance"
-            tools:paddingTop="100dp" />
+            android:textAppearance="@android:style/TextAppearance" />
+
+        <ProgressBar
+            android:id="@+id/loadingIV"
+            style="?android:attr/progressBarStyle"
+            android:layout_width="match_parent"
+            android:layout_height="126dp"
+            android:layout_centerInParent="true"
+            android:visibility="visible"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintLeft_toLeftOf="parent"
+            app:layout_constraintRight_toRightOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            tools:paddingTop="10dp" />
+        <ImageView
+            android:id="@+id/imageView"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:src="@drawable/wait"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.5"
+            app:layout_constraintStart_toStartOf="parent"
+            tools:layout_editor_absoluteY="38dp" />
+
 
     </LinearLayout>
 
