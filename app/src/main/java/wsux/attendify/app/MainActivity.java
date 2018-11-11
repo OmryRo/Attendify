@@ -142,6 +142,7 @@ public class MainActivity extends Activity {
         synchronized (SENT_LOCK) {
             isSending = false;
         }
+        sendButton.setEnabled(true);
     }
 
     @Override

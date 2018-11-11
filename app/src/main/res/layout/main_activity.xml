@@ -12,7 +12,7 @@
         android:layout_height="wrap_content"
         android:layout_marginStart="8dp"
         android:layout_marginEnd="8dp"
-        android:layout_marginBottom="76dp"
+        android:layout_marginBottom="84dp"
         android:text="שלח"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
@@ -23,6 +23,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="8dp"
+        android:layout_marginTop="8dp"
         android:layout_marginEnd="8dp"
         android:layout_marginBottom="20dp"
         android:ems="10"
@@ -31,7 +32,9 @@
         app:layout_constraintBottom_toTopOf="@+id/emailET"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.503"
-        app:layout_constraintStart_toStartOf="parent" />
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/textView5"
+        app:layout_constraintVertical_bias="0.591" />
 
     <EditText
         android:id="@+id/emailET"
@@ -39,7 +42,7 @@
         android:layout_height="wrap_content"
         android:layout_marginStart="8dp"
         android:layout_marginEnd="8dp"
-        android:layout_marginBottom="32dp"
+        android:layout_marginBottom="36dp"
         android:ems="10"
         android:hint="דואר אלקטרוני"
         android:inputType="textEmailAddress"
@@ -50,32 +53,31 @@
 
     <TextView
         android:id="@+id/textView4"
-        android:layout_width="305dp"
-        android:layout_height="34dp"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
         android:layout_marginStart="8dp"
-        android:layout_marginTop="8dp"
+        android:layout_marginTop="136dp"
         android:layout_marginEnd="8dp"
-        android:layout_marginBottom="8dp"
         android:text="כדי לוודא שאתה אכן בכיתה, מלא את פרטיך מטה"
-        app:layout_constraintBottom_toBottomOf="@+id/loadingPopup"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.507"
+        app:layout_constraintHorizontal_bias="0.506"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="1.0" />
+        app:layout_constraintTop_toTopOf="parent" />
 
     <TextView
         android:id="@+id/textView5"
-        android:layout_width="240dp"
-        android:layout_height="56dp"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
         android:layout_marginStart="8dp"
+        android:layout_marginTop="24dp"
         android:layout_marginEnd="8dp"
-        android:layout_marginBottom="44dp"
-        android:text="שים לב: מזהה המכשיר שלך נרשם בתהליך, כלומר, ניתן לאשר נוכחות עבור סטודנט אחד למכשיר"
+        android:text="שים לב : ניתן להירשם בהרצאה פעם אחת למכשיר"
         android:textColor="@android:color/holo_red_light"
-        app:layout_constraintBottom_toTopOf="@+id/fullNameET"
+        android:textSize="11sp"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent" />
+        app:layout_constraintHorizontal_bias="0.503"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/textView4" />
 
     <LinearLayout
         android:id="@+id/loadingCover"
@@ -168,13 +170,5 @@
         android:layout_height="wrap_content"
         android:orientation="vertical"
         app:layout_constraintGuide_begin="20dp" />
-
-    <TextView
-        android:id="@+id/textView"
-        android:layout_width="wrap_content"
-        android:layout_height="54dp"
-        android:text="TextView"
-        app:layout_constraintTop_toTopOf="@+id/textView4"
-        tools:layout_editor_absoluteX="163dp" />
 
 </android.support.constraint.ConstraintLayout>
