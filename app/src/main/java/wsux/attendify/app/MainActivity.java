@@ -92,8 +92,8 @@ public class MainActivity extends Activity {
                     return;
                 }
 
-                final String email = emailET.getText().toString();
-                final String name = nameET.getText().toString();
+                final String email = emailET.getText().toString().trim();
+                final String name = nameET.getText().toString().trim();
 
                 if (!name.matches(NAME_MATCH)) {
                     popup(R.string.invalid_name);
@@ -142,6 +142,7 @@ public class MainActivity extends Activity {
         synchronized (SENT_LOCK) {
             isSending = false;
         }
+        sendButton.setEnabled(true);
     }
 
     @Override
